@@ -321,11 +321,11 @@ namespace OptimalPlayer.ViewModel
             {
                 if (SideControl is PlaylistsControl)
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\equalizer_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/equalizer_icon.png", UriKind.Absolute));
                 }
                 else
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\playlist_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/playlist_icon.png", UriKind.Absolute));
                 }
             }
         }
@@ -334,7 +334,7 @@ namespace OptimalPlayer.ViewModel
         {
             get
             {
-                return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\add_playlist_icon.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_playlist_icon.png", UriKind.Absolute));
             }
         }
 
@@ -342,7 +342,7 @@ namespace OptimalPlayer.ViewModel
         {
             get
             {
-                return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\add_file_icon.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_file_icon.png", UriKind.Absolute));
             }
         }
 
@@ -350,7 +350,7 @@ namespace OptimalPlayer.ViewModel
         {
             get
             {
-                return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\delete_icon.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/delete_icon.png", UriKind.Absolute));
             }
         }
         #endregion
