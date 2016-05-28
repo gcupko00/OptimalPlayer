@@ -250,11 +250,11 @@ namespace OptimalPlayer.ViewModel
             {
                 if (Player.PlaybackState == PlaybackState.Playing)
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\pause_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/pause_icon.png", UriKind.Absolute));
                 }
                 else
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\play_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/play_icon.png", UriKind.Absolute));
                 }
             }
         }
@@ -263,7 +263,7 @@ namespace OptimalPlayer.ViewModel
         {
             get
             {
-                return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\stop_icon.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/stop_icon.png", UriKind.Absolute));
             }
         }
 
@@ -271,7 +271,7 @@ namespace OptimalPlayer.ViewModel
         {
             get
             {
-                return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\prev_icon.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/prev_icon.png", UriKind.Absolute));
             }
         }
 
@@ -279,26 +279,25 @@ namespace OptimalPlayer.ViewModel
         {
             get
             {
-                return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\next_icon.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/next_icon.png", UriKind.Absolute));
             }
         }
 
         public ImageSource RepeatIcon
         {
-            // to be updated to return icon according to playback repeat state
             get
             {
                 if (Player.RepeatCurrentTrack)
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\repeat_all_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/repeat_all_icon.png", UriKind.Absolute));
                 }
                 else if (Player.RepeatAll)
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\no_repeat_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/no_repeat_icon.png", UriKind.Absolute));
                 }
                 else
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\repeat_one_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/repeat_one_icon.png", UriKind.Absolute));
                 }
             }
         }
@@ -309,11 +308,11 @@ namespace OptimalPlayer.ViewModel
             {
                 if (Player.Shuffled)
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\no_shuffle_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/no_shuffle_icon.png", UriKind.Absolute));
                 }
                 else
                 {
-                    return new BitmapImage(new Uri(@"C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\Resources\shuffle_icon.png"));
+                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/shuffle_icon.png", UriKind.Absolute));
                 }
             }
         }
