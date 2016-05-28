@@ -27,7 +27,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="DurationSliderRepeatButtonLeft" TargetType="RepeatButton">
+        <Style x:Key="DurationSliderRepeatButton" TargetType="RepeatButton">
             <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
             <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
             <Setter Property="IsTabStop" Value="False"></Setter>
@@ -107,13 +107,13 @@
                 </Grid.RowDefinitions>
                 <Track Grid.Row="1" x:Name="PART_Track">
                     <Track.DecreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource DurationSliderRepeatButtonLeft}"  Command="Slider.DecreaseLarge"></RepeatButton>
+                        <RepeatButton Style="{StaticResource DurationSliderRepeatButton}"  Command="Slider.DecreaseLarge"></RepeatButton>
                     </Track.DecreaseRepeatButton>
                     <Track.Thumb>
                         <Thumb Style="{StaticResource DurationSliderThumb}"></Thumb>
                     </Track.Thumb>
                     <Track.IncreaseRepeatButton>
-                        <RepeatButton Style="{StaticResource VolumeSliderRepeatButtonRight}" Command="Slider.IncreaseLarge"></RepeatButton>
+                        <RepeatButton Style="{StaticResource DurationSliderRepeatButton}" Command="Slider.IncreaseLarge"></RepeatButton>
                     </Track.IncreaseRepeatButton>
                 </Track>
             </Grid>

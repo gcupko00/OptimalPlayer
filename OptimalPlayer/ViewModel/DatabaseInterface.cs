@@ -1,14 +1,12 @@
-﻿using System;
+﻿using OptimalPlayer.Model;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.SqlClient;
-using System.Windows;
-using System.Data;
 using System.Collections.ObjectModel;
-using OptimalPlayer.Model;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
+using System.Windows;
 
 namespace OptimalPlayer.ViewModel
 {
@@ -65,8 +63,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to fetch data");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to fetch data");
                     return null;
                 }
             }
@@ -110,8 +108,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to load data");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to load data");
                     return null;
                 }
             }
@@ -137,8 +135,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to add playlist");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to add playlist");
                 }
             }
         }
@@ -162,8 +160,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to delete playlist");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to delete playlist");
                 }
             }
         }
@@ -201,8 +199,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to insert data");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to insert data");
                 }
             }
         }
@@ -230,8 +228,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to remove data");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to remove data");
                 }
             }
         }
@@ -252,8 +250,8 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show(e.Message, "Error trying to remove data");
                     connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to remove data");
                 }
             }
         }
@@ -279,7 +277,7 @@ namespace OptimalPlayer.ViewModel
                 }
                 catch (Exception e)
                 {
-
+                    connection.Close();
                     MessageBox.Show(e.Message);
                     return -1;
                 }

@@ -30,19 +30,8 @@ namespace OptimalPlayer.ViewModel
         public ViewModelLocator()
         {
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
-
-            ////if (ViewModelBase.IsInDesignModeStatic)
-            ////{
-            ////    // Create design time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DesignDataService>();
-            ////}
-            ////else
-            ////{
-            ////    // Create run time view services and models
-            ////    SimpleIoc.Default.Register<IDataService, DataService>();
-            ////}
-
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<EqualizerViewModel>();
         }
 
         public MainViewModel Main
@@ -50,6 +39,14 @@ namespace OptimalPlayer.ViewModel
             get
             {
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
+            }
+        }
+
+        public EqualizerViewModel Equalizer
+        {
+            get
+            {
+                return ServiceLocator.Current.GetInstance<EqualizerViewModel>();
             }
         }
         

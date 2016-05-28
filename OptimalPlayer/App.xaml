@@ -9,6 +9,5 @@
              xmlns:vm="clr-namespace:OptimalPlayer.ViewModel">
     <Application.Resources>
         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
-        
     </Application.Resources>
 </Application>

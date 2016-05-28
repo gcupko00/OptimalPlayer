@@ -3,10 +3,123 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:OptimalPlayer.View"
+             xmlns:local="clr-namespace:OptimalPlayer"
+             xmlns:vm="clr-namespace:OptimalPlayer.ViewModel"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" d:DesignWidth="300"
+             DataContext="{Binding Equalizer, Source={StaticResource Locator}}">
+    <UserControl.Resources>
+        <Style x:Key="SliderRepeatButton" TargetType="RepeatButton">
+            <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+            <Setter Property="IsTabStop" Value="False"></Setter>
+            <Setter Property="Focusable" Value="False"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RepeatButton">
+                        <Border  BorderThickness="1" Background="LightBlue" Width="18"></Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="SliderThumb" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Rectangle Height="20" Width="18" Fill="DodgerBlue"></Rectangle>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <ControlTemplate x:Key="Slider" TargetType="Slider">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto" MinWidth="{TemplateBinding MinWidth}"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Track Grid.Row="1" x:Name="PART_Track">
+                    <Track.DecreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatButton}"  Command="Slider.DecreaseLarge"></RepeatButton>
+                    </Track.DecreaseRepeatButton>
+                    <Track.Thumb>
+                        <Thumb Style="{StaticResource SliderThumb}"></Thumb>
+                    </Track.Thumb>
+                    <Track.IncreaseRepeatButton>
+                        <RepeatButton Style="{StaticResource SliderRepeatButton}" Command="Slider.IncreaseLarge"></RepeatButton>
+                    </Track.IncreaseRepeatButton>
+                </Track>
+            </Grid>
+        </ControlTemplate>
+
+        <Style x:Key="SliderStyle" TargetType="Slider">
+            <Setter Property="Focusable" Value="False"></Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True"></Setter>
+            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+            <Setter Property="IsMoveToPointEnabled" Value="True"></Setter>
+            <Setter Property="Template" Value="{StaticResource Slider}"></Setter>
             
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Orientation" Value="Vertical"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+            <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
+            <Setter Property="Minimum" Value="{Binding MinimumGain}"></Setter>
+            <Setter Property="Maximum" Value="{Binding MaximumGain}"></Setter>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0"
+                Margin="5" Padding="10 5"
+                HorizontalAlignment="Right"
+                Content="Default"
+                Command="{Binding ResetToDefault}"></Button>
+        <ScrollViewer Grid.Row="1" 
+                      Margin="20 0"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Right">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                    <ColumnDefinition Width="30"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Slider Grid.Column="0"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band1, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="1"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band2, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="2"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band3, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="3"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band4, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="4"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band5, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="5"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band6, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="6"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band7, Mode=TwoWay}"></Slider>
+                <Slider Grid.Column="7"
+                        Style="{StaticResource SliderStyle}"
+                        Value="{Binding Band8, Mode=TwoWay}"></Slider>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

@@ -109,8 +109,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\AudioFile.cs" />
+    <Compile Include="Model\EqualizerBand.cs" />
     <Compile Include="ViewModel\BindingProxy.cs" />
     <Compile Include="ViewModel\DatabaseInterface.cs" />
+    <Compile Include="ViewModel\Equalizer.cs" />
+    <Compile Include="ViewModel\EqualizerViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\Player.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />

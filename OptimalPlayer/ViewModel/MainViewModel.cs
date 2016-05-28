@@ -2,22 +2,17 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using Microsoft.Win32;
 using NAudio.Wave;
-using System.Windows.Input;
-using System.Data.SqlClient;
-using System.Windows;
-using System.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using System.IO;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
+using OptimalPlayer.Model;
 using OptimalPlayer.View;
-using System.Reflection;
+using System;
+using System.Collections.ObjectModel;
+using System.Configuration;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using OptimalPlayer.Model;
-using System.Configuration;
 
 namespace OptimalPlayer.ViewModel
 {
@@ -377,18 +372,19 @@ namespace OptimalPlayer.ViewModel
         {
             try
             {
+                System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+                timer.Tick += Timer_Tick;
+                timer.Start();
+                Player.playbackFinishedEventHandler += Player_playbackFinishedEventHandler;
+
                 DatabaseInterface.SetupConnection(connectionString);
                 Playlists = DatabaseInterface.GetPlaylists();
                 SelectedPlaylist = Playlists[0];
                 UpdatePlaylist();
-                Player.playbackFinishedEventHandler += Player_playbackFinishedEventHandler;
-                System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
-                timer.Tick += Timer_Tick;
-                timer.Start();
             }
             catch
             {
-                MessageBox.Show("Unable to load files!", "Error");
+                MessageBox.Show("No files to load!", "");
             }
         }
         

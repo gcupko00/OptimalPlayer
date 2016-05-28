@@ -1,8 +1,9 @@
-﻿using System;
+﻿using NAudio.Wave;
+using OptimalPlayer.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using OptimalPlayer.Model;
-using NAudio.Wave;
+using System.Windows;
 
 namespace OptimalPlayer.ViewModel
 {
@@ -11,7 +12,6 @@ namespace OptimalPlayer.ViewModel
         #region Fields
         public static IWavePlayer playbackDevice;
         private static AudioFileReader inputStream;
-
         private static List<AudioFile> audioFiles;
         #endregion
 
@@ -32,6 +32,10 @@ namespace OptimalPlayer.ViewModel
                 }
             }
         }
+
+        public static Equalizer Equalizer { get; set; }
+
+        public static EqualizerBand[] EqualizerBands { get; set; }
 
         public static TimeSpan Duration
         {
@@ -100,6 +104,12 @@ namespace OptimalPlayer.ViewModel
             }
         }
 
+        public static bool RepeatCurrentTrack { get; set; }
+
+        public static bool RepeatAll { get; set; }
+
+        public static bool Shuffled { get; private set; }
+
         private static float volume = 1;
         public static float Volume
         {
@@ -111,7 +121,7 @@ namespace OptimalPlayer.ViewModel
                 }
                 else
                 {
-                    return 1;
+                    return volume;
                 }
             }
             set
@@ -124,12 +134,6 @@ namespace OptimalPlayer.ViewModel
                 volume = value;
             }
         }
-
-        public static bool RepeatCurrentTrack { get; set; }
-
-        public static bool RepeatAll { get; set; }
-
-        public static bool Shuffled { get; private set; }
         #endregion
 
         #region Methods
@@ -148,7 +152,9 @@ namespace OptimalPlayer.ViewModel
 
                 inputStream = new AudioFileReader(fileToPlay.Path);
 
-                playbackDevice.Init(inputStream);
+                Equalizer = new Equalizer(inputStream, EqualizerBands);
+
+                playbackDevice.Init(Equalizer);
 
                 playbackDevice.PlaybackStopped += PlaybackDevice_PlaybackStopped;
 
@@ -213,7 +219,7 @@ namespace OptimalPlayer.ViewModel
 
         public static void PlayPrevious()
         {
-            if (audioFiles != null && audioFiles.Count > 0 &&  FilePlaying != audioFiles.First())
+            if (audioFiles != null && audioFiles.Count > 0 && FilePlaying != null && FilePlaying != audioFiles.First())
             {
                 StartPlaying(audioFiles[audioFiles.IndexOf(FilePlaying) - 1]);
             }
