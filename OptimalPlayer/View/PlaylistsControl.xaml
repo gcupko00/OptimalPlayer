@@ -25,9 +25,10 @@
                     <Image Source="{Binding NewPlaylistIcon}"></Image>
             </Button>
         </DockPanel>
-        <ContentPresenter Grid.Row="1" 
+        <ContentPresenter Grid.Row="1"
                           Content="{Binding PlaylistInputControl}"
-                          HorizontalAlignment="Stretch"></ContentPresenter>
+                          HorizontalAlignment="Stretch">
+        </ContentPresenter>
         <ListView Grid.Row="2"
                   VerticalAlignment="Stretch"
                   ItemsSource="{Binding Playlists}"
@@ -36,6 +37,13 @@
                 <!-- Context menu is not part of the visual tree, so binding to a command is different because DataContext is not accessible. 
                      http://stackoverflow.com/questions/9994241/mvvm-binding-command-to-contextmenu-item -->
                 <ContextMenu x:Key="ItemContextMenu" DataContext="{StaticResource DataContextProxy}">
+                    <MenuItem Header="Rename"
+                              Command="{Binding Data.RenamePlaylist}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=SelectedItem}">
+                        <MenuItem.Icon>
+                            <Image Source="{Binding Data.RenameIcon}"></Image>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Header="Delete"
                               Command="{Binding Data.DeletePlaylist}"
                               CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListView}, Path=SelectedItem}">

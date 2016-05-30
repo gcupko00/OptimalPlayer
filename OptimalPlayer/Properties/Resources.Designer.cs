@@ -173,6 +173,16 @@ namespace OptimalPlayer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap rename_icon {
+            get {
+                object obj = ResourceManager.GetObject("rename_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap repeat_all_icon {
             get {
                 object obj = ResourceManager.GetObject("repeat_all_icon", resourceCulture);

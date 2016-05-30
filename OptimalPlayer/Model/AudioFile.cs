@@ -1,5 +1,8 @@
 ﻿namespace OptimalPlayer.Model
 {
+    /// <summary>
+    /// This class contains properties which describe audio file characteristics
+    /// </summary>
     public class AudioFile
     {
         public int FileID { get; set; }

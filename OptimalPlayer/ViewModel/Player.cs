@@ -3,7 +3,6 @@ using OptimalPlayer.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 
 namespace OptimalPlayer.ViewModel
 {
@@ -161,6 +160,8 @@ namespace OptimalPlayer.ViewModel
                 FilePlaying = fileToPlay;
 
                 Play();
+
+                filePlaybackStartedEventHandler();
             }
             catch
             {
@@ -295,6 +296,10 @@ namespace OptimalPlayer.ViewModel
         public static event PlaybackFinishedEventHandler playbackFinishedEventHandler;
 
         public delegate void PlaybackFinishedEventHandler();
+
+        public static event FilePlaybackStartedEventHandler filePlaybackStartedEventHandler;
+
+        public delegate void FilePlaybackStartedEventHandler();
         #endregion
     }
 }

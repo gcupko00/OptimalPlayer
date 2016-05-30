@@ -1,16 +1,15 @@
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using Microsoft.Win32;
 using NAudio.Wave;
 using OptimalPlayer.Model;
 using OptimalPlayer.View;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -22,17 +21,44 @@ namespace OptimalPlayer.ViewModel
     /// See http://www.galasoft.ch/mvvm
     /// </para>
     /// </summary>
-    public class MainViewModel : ViewModelBase
+    public partial class MainViewModel : ViewModelBase
     {
         #region Fields
-        // Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Gligorije\Documents\Visual Studio 2015\Projects\OptimalPlayer\OptimalPlayer\PlaylistsDatabase.mdf;Integrated Security=True
-        private string connectionString = ConfigurationManager.ConnectionStrings["PlaylistDatabaseConnectionString"].ConnectionString;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["PlaylistDatabaseConnectionString"].ConnectionString;
 
-        private UserControl playlistControl = new PlaylistsControl();
-        private UserControl equalizerControl = new EqualizerControl();
+        private readonly UserControl playlistControl = new PlaylistsControl();
+        private readonly UserControl equalizerControl = new EqualizerControl();
+
+        // When CreatePlaylist command is called, input mode is set to Add
+        // and when RenamePlaylist is called, it is set to Rename
+        private enum InputMode { Add, Rename };
+        private InputMode playlistInputMode;
+
+        // Stores old playlist name when that playlist is being renamed
+        private string oldPlaylistName;
+
+        private readonly Dictionary<string, Uri> iconUris = new Dictionary<string, Uri>()
+        {
+            { "Pause", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/pause_icon.png", UriKind.Absolute) },
+            { "Play", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/play_icon.png", UriKind.Absolute) },
+            { "Stop", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/stop_icon.png", UriKind.Absolute) },
+            { "Previous", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/prev_icon.png", UriKind.Absolute) },
+            { "Next", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/next_icon.png", UriKind.Absolute) },
+            { "RepeatAll", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/repeat_all_icon.png", UriKind.Absolute) },
+            { "NoRepeat", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/no_repeat_icon.png", UriKind.Absolute) },
+            { "RepeatCurrent", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/repeat_one_icon.png", UriKind.Absolute) },
+            { "NoShuffle", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/no_shuffle_icon.png", UriKind.Absolute) },
+            { "Shuffle", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/shuffle_icon.png", UriKind.Absolute) },
+            { "Equalizer", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/equalizer_icon.png", UriKind.Absolute) },
+            { "Playlist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/playlist_icon.png", UriKind.Absolute) },
+            { "AddPlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_playlist_icon.png", UriKind.Absolute) },
+            { "AddFile", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_file_icon.png", UriKind.Absolute) },
+            { "Delete", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/delete_icon.png", UriKind.Absolute) },
+            { "Rename", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/rename_icon.png", UriKind.Absolute) }
+        };
         #endregion
 
-        #region Constructors
+        #region Constructor
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -245,38 +271,20 @@ namespace OptimalPlayer.ViewModel
             {
                 if (Player.PlaybackState == PlaybackState.Playing)
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/pause_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["Pause"]);
                 }
                 else
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/play_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["Play"]);
                 }
             }
         }
 
-        public ImageSource StopPlaybackIcon
-        {
-            get
-            {
-                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/stop_icon.png", UriKind.Absolute));
-            }
-        }
+        public ImageSource StopPlaybackIcon { get { return new BitmapImage(iconUris["Stop"]); } }
 
-        public ImageSource PreviousFileIcon
-        {
-            get
-            {
-                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/prev_icon.png", UriKind.Absolute));
-            }
-        }
+        public ImageSource PreviousFileIcon { get { return new BitmapImage(iconUris["Previous"]); } }
 
-        public ImageSource NextFileIcon
-        {
-            get
-            {
-                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/next_icon.png", UriKind.Absolute));
-            }
-        }
+        public ImageSource NextFileIcon { get { return new BitmapImage(iconUris["Next"]); } }
 
         public ImageSource RepeatIcon
         {
@@ -284,15 +292,15 @@ namespace OptimalPlayer.ViewModel
             {
                 if (Player.RepeatCurrentTrack)
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/repeat_all_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["RepeatAll"]);
                 }
                 else if (Player.RepeatAll)
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/no_repeat_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["NoRepeat"]);
                 }
                 else
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/repeat_one_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["RepeatCurrent"]);
                 }
             }
         }
@@ -303,11 +311,11 @@ namespace OptimalPlayer.ViewModel
             {
                 if (Player.Shuffled)
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/no_shuffle_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["NoShuffle"]);
                 }
                 else
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/shuffle_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["Shuffle"]);
                 }
             }
         }
@@ -321,38 +329,22 @@ namespace OptimalPlayer.ViewModel
             {
                 if (SideControl is PlaylistsControl)
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/equalizer_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["Equalizer"]);
                 }
                 else
                 {
-                    return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/playlist_icon.png", UriKind.Absolute));
+                    return new BitmapImage(iconUris["Playlist"]);
                 }
             }
         }
 
-        public ImageSource NewPlaylistIcon
-        {
-            get
-            {
-                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_playlist_icon.png", UriKind.Absolute));
-            }
-        }
+        public ImageSource NewPlaylistIcon { get { return new BitmapImage(iconUris["AddPlaylist"]); } }
 
-        public ImageSource AddFileIcon
-        {
-            get
-            {
-                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_file_icon.png", UriKind.Absolute));
-            }
-        }
+        public ImageSource AddFileIcon { get { return new BitmapImage(iconUris["AddFile"]); } }
 
-        public ImageSource DeleteIcon
-        {
-            get
-            {
-                return new BitmapImage(new Uri("pack://application:,,,/OptimalPlayer;component/Resources/delete_icon.png", UriKind.Absolute));
-            }
-        }
+        public ImageSource DeleteIcon { get { return new BitmapImage(iconUris["Delete"]); } }
+
+        public ImageSource RenameIcon { get { return new BitmapImage(iconUris["Rename"]); } }
         #endregion
         #endregion
 
@@ -376,6 +368,7 @@ namespace OptimalPlayer.ViewModel
                 timer.Tick += Timer_Tick;
                 timer.Start();
                 Player.playbackFinishedEventHandler += Player_playbackFinishedEventHandler;
+                Player.filePlaybackStartedEventHandler += Player_filePlaybackStartedEventHandler;
 
                 DatabaseInterface.SetupConnection(connectionString);
                 Playlists = DatabaseInterface.GetPlaylists();
@@ -387,7 +380,7 @@ namespace OptimalPlayer.ViewModel
                 MessageBox.Show("No files to load!", "");
             }
         }
-        
+
         /// <summary>
         /// Initializes commands for view buttons
         /// </summary>
@@ -396,6 +389,8 @@ namespace OptimalPlayer.ViewModel
             CreatePlaylist = new RelayCommand(() => CreatePlaylistExecute());
             SavePlaylist = new RelayCommand(() => SavePlaylistExecute());
             DeletePlaylist = new RelayCommand<object>((item) => DeletePlaylistExecute(item));
+            RenamePlaylist = new RelayCommand<object>((item) => RenamePlaylistExecute(item));
+            OpenPlaylistFile = new RelayCommand(() => OpenPlaylistFileExecute());
             AddFileToPlaylist = new RelayCommand(() => AddFileToPlaylistExecute());
             DeleteFileFromPlaylist = new RelayCommand(() => DeleteFileFromPlaylistExecute());
             PlayPause = new RelayCommand(() => PlayPauseExecute());
@@ -414,19 +409,24 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         private void UpdatePlaylist()
         {
-            if (SelectedPlaylist != null)
+            try
             {
-                Files = DatabaseInterface.GetPlaylistFiles(SelectedPlaylist);
-                if (Files != null && Files.Count > 1)
+                if (SelectedPlaylist != null)
                 {
-                    SelectedFile = Files[0];
-                    Player.Init(Files.ToList());
+                    Files = DatabaseInterface.GetPlaylistFiles(SelectedPlaylist);
                 }
+
+                SelectedFile = Files[0];
+                Player.Init(Files.ToList());
             }
-            else
+            catch
             {
                 Player.Stop();
-                Files.Clear();
+
+                if (Files != null)
+                {
+                    Files.Clear();
+                }
             }
         }
 
@@ -437,239 +437,6 @@ namespace OptimalPlayer.ViewModel
         {
             Playlists = DatabaseInterface.GetPlaylists();
             RaisePropertyChanged("Playlists");
-        }
-        #endregion
-
-        #region Commands
-        public ICommand CreatePlaylist { get; set; }
-
-        private void CreatePlaylistExecute()
-        {
-            if (PlaylistInputControl == null)
-            {
-                PlaylistInputControl = new PlaylistInputControl();
-            }
-            else
-            {
-                PlaylistInputControl = null;
-            }
-        }
-        
-        public ICommand SavePlaylist { get; set; }
-
-        private void SavePlaylistExecute()
-        {
-            if (!Playlists.Contains(NewPlaylistName) && !String.IsNullOrEmpty(NewPlaylistName))
-            {
-                DatabaseInterface.AddPlaylist(NewPlaylistName);
-                RefreshPlaylistsList();
-                PlaylistInputControl = null;
-            }
-            else
-            {
-                PlaylistInputTextboxBackground = "LightCoral";
-            }
-
-            NewPlaylistName = "New Playlist";
-        }
-
-        public ICommand DeletePlaylist { get; set; }
-
-        private void DeletePlaylistExecute(object playlist)
-        {
-            if (playlist.ToString() == SelectedPlaylist)
-            {
-                StopExecute();
-                if (SelectedPlaylist != Playlists.First())
-                {
-                    SelectedPlaylist = Playlists[Playlists.IndexOf(SelectedPlaylist) - 1];
-                }
-                else if (SelectedPlaylist != Playlists.Last())
-                {
-                    SelectedPlaylist = Playlists[Playlists.IndexOf(SelectedPlaylist) + 1];
-                }
-            }
-
-            DatabaseInterface.DeletePlaylist(playlist.ToString());
-            RefreshPlaylistsList();
-            UpdatePlaylist();
-            RaisePropertyChanged("PlaybackNextStateIcon");
-        }
-
-        public ICommand AddFileToPlaylist { get; set; }
-
-        private void AddFileToPlaylistExecute()
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "All Supported Files (*.wav;*.mp3)|*.wav;*.mp3|All Files (*.*)|*.*";
-            openFileDialog.Multiselect = true;
-            bool? result = openFileDialog.ShowDialog();
-
-            if (result.HasValue && result.Value)
-            {
-                if (Playlists.Count == 0)
-                {
-                    SavePlaylistExecute();
-                    RefreshPlaylistsList();
-                    SelectedPlaylist = Playlists[0];
-                }
-                else if (SelectedPlaylist == null)
-                {
-                    MessageBox.Show("Please, select the playlist!", "No playlist selected");
-                }
-
-                foreach (string fileName in openFileDialog.FileNames)
-                {
-                    DatabaseInterface.AddFileToPlaylist(SelectedPlaylist, fileName);
-                }
-            }
-
-            UpdatePlaylist();
-        }
-
-        public ICommand DeleteFileFromPlaylist { get; set; }
-
-        private void DeleteFileFromPlaylistExecute()
-        {
-            try
-            {
-                if (SelectedFile == Player.FilePlaying)
-                {
-                    PlayNextExecute();
-                }
-
-                if (SelectedFile == Files.Last())
-                {
-                    StopExecute();
-                }
-
-                DatabaseInterface.RemoveFileFromPlaylist(SelectedPlaylist, SelectedFile.Path);
-                Files.Remove(SelectedFile);
-
-                RaisePropertyChanged("PlaybackNextStateIcon");
-            }
-            catch
-            {
-                return;
-            }
-        }
-
-        public ICommand PlayPause { get; set; }
-
-        private void PlayPauseExecute()
-        {
-            if (Player.PlaybackState == PlaybackState.Playing)
-            {
-                Player.Pause();
-            }
-            else if (Player.PlaybackState == PlaybackState.Paused)
-            {
-                Player.Play();
-            }
-            else
-            {
-                Player.StartPlaying(SelectedFile);
-            }
-
-            RaisePropertyChanged("PlaybackNextStateIcon");
-        }
-
-        public ICommand Stop { get; set; }
-
-        private void StopExecute()
-        {
-            Player.Stop();
-
-            RaisePropertyChanged("PlaybackNextStateIcon");
-        }
-
-        public ICommand PlayNext { get; set; }
-
-        private void PlayNextExecute()
-        {
-            Player.PlayNext();
-
-            RaisePropertyChanged("PlaybackNextStateIcon");
-        }
-
-        public ICommand PlayPrevious { get; set; }
-
-        private void PlayPreviousExecute()
-        {
-            Player.PlayPrevious();
-
-            RaisePropertyChanged("PlaybackNextStateIcon");
-        }
-
-        public ICommand PlayClicked { get; set; }
-
-        private void PlayClickedExecute()
-        {
-            Player.StartPlaying(SelectedFile);
-
-            RaisePropertyChanged("PlaybackNextStateIcon");
-        }
-
-        public ICommand RepeatCommand { get; set; }
-
-        private void RepeatCommandExecute()
-        {
-            if (!Player.RepeatCurrentTrack && !Player.RepeatAll)
-            {
-                Player.RepeatCurrentTrack = true;
-                Player.RepeatAll = false;      
-            }
-            else if (Player.RepeatCurrentTrack && !Player.RepeatAll)
-            {
-                Player.RepeatCurrentTrack = false;
-                Player.RepeatAll = true;
-            }
-            else
-            {
-                Player.RepeatCurrentTrack = false;
-                Player.RepeatAll = false;
-            }
-
-            RaisePropertyChanged("RepeatIcon");
-        }
-
-        public ICommand ShuffleUnshuffleCommand { get; set; }
-
-        private void ShuffleUnshuffleCommandExecute()
-        {
-            if (!Player.Shuffled)
-            {
-                Player.Shuffle();
-            }
-            else
-            {
-                Player.Unshuffle();
-            }
-
-            RaisePropertyChanged("ShuffleIcon");
-        }
-
-        public ICommand ChangeSideControl { get; set; }
-
-        private void ChangeSideControlExecute()
-        {
-            if (SideControl == playlistControl)
-            {
-                SideControl = equalizerControl;
-            }
-            else
-            {
-                SideControl = playlistControl;
-            }
-
-            RaisePropertyChanged("SideControlIcon");
-        }
-
-        public ICommand SelectDoubleClickedPlaylist { get; set; }
-
-        private void SelectDoubleClickedPlaylistExecute(object playlist)
-        {
-            SelectedPlaylist = playlist.ToString();
         }
         #endregion
 
@@ -684,6 +451,11 @@ namespace OptimalPlayer.ViewModel
         private void Player_playbackFinishedEventHandler()
         {
             RaisePropertyChanged("PlaybackNextStateIcon");
+        }
+
+        private void Player_filePlaybackStartedEventHandler()
+        {
+            SelectedFile = Files[Files.IndexOf(Player.FilePlaying)];
         }
         #endregion
     }

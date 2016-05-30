@@ -64,7 +64,7 @@ namespace OptimalPlayer.ViewModel
                 catch (Exception e)
                 {
                     connection.Close();
-                    MessageBox.Show(e.Message, "Error trying to fetch data");
+                    MessageBox.Show(e.Message, "Error trying to load playlists");
                     return null;
                 }
             }
@@ -109,7 +109,7 @@ namespace OptimalPlayer.ViewModel
                 catch (Exception e)
                 {
                     connection.Close();
-                    MessageBox.Show(e.Message, "Error trying to load data");
+                    MessageBox.Show(e.Message, "Error trying to load files");
                     return null;
                 }
             }
@@ -121,13 +121,14 @@ namespace OptimalPlayer.ViewModel
         /// <param name="newPlaylistName">Name of the playlist being added</param>
         public static void AddPlaylist(string newPlaylistName)
         {
-            string commandString = "INSERT INTO Playlists (playlist_name) VALUES (@playlistname)";
+            string commandString = "INSERT INTO Playlists (playlist_name, creation_datetime) VALUES (@playlistname, @creationdatetime)";
 
             using (SqlCommand command = new SqlCommand(commandString, connection))
             {
                 try
                 {
                     command.Parameters.Add("@playlistname", SqlDbType.VarChar).Value = newPlaylistName;
+                    command.Parameters.Add("@creationdatetime", SqlDbType.DateTime).Value = DateTime.Now;
 
                     connection.Open();
                     command.ExecuteNonQuery();
@@ -162,6 +163,30 @@ namespace OptimalPlayer.ViewModel
                 {
                     connection.Close();
                     MessageBox.Show(e.Message, "Error trying to delete playlist");
+                }
+            }
+        }
+
+        public static void RenamePlaylist(string oldPlaylistName, string newPlaylistName)
+        {
+            string commandString = "UPDATE Playlists SET playlist_name=@newplaylistname WHERE playlist_name=@oldplaylistname";
+
+
+            using (SqlCommand command = new SqlCommand(commandString, connection))
+            {
+                try
+                {
+                    command.Parameters.Add("@newplaylistname", SqlDbType.VarChar).Value = newPlaylistName;
+                    command.Parameters.Add("@oldplaylistname", SqlDbType.VarChar).Value = oldPlaylistName;
+
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
+                catch (Exception e)
+                {
+                    connection.Close();
+                    MessageBox.Show(e.Message, "Error trying to rename playlist");
                 }
             }
         }
@@ -255,7 +280,11 @@ namespace OptimalPlayer.ViewModel
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Gets primary key of playlist. Used because trying to access table by other columns causes exception for some reason
+        /// </summary>
+        /// <returns>Playlist id (primary key)</returns>
         private static int GetPlaylistID(string playlistName)
         {
 
@@ -270,6 +299,7 @@ namespace OptimalPlayer.ViewModel
                     connection.Open();
                     SqlDataReader reader = command.ExecuteReader();
                     reader.Read();
+
                     int playlistID = (int)reader[0];
                     connection.Close();
 
