@@ -103,6 +103,16 @@ namespace OptimalPlayer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap load_playlist_icon {
+            get {
+                object obj = ResourceManager.GetObject("load_playlist_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap next_icon {
             get {
                 object obj = ResourceManager.GetObject("next_icon", resourceCulture);
@@ -196,6 +206,16 @@ namespace OptimalPlayer.Properties {
         internal static System.Drawing.Bitmap repeat_one_icon {
             get {
                 object obj = ResourceManager.GetObject("repeat_one_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap save_playlist_icon {
+            get {
+                object obj = ResourceManager.GetObject("save_playlist_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

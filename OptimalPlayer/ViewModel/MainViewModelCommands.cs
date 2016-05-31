@@ -107,6 +107,13 @@ namespace OptimalPlayer.ViewModel
             UpdatePlaylist();
         }
 
+        public ICommand SavePlaylistToFile { get; set; }
+
+        private void SavePlaylistToFileExecute()
+        {
+            PlaylistExporter.SavePlaylist( Files.ToList());
+        }
+
         public ICommand AddFileToPlaylist { get; set; }
 
         private void AddFileToPlaylistExecute()

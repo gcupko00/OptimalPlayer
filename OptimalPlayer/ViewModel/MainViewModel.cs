@@ -54,7 +54,9 @@ namespace OptimalPlayer.ViewModel
             { "AddPlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_playlist_icon.png", UriKind.Absolute) },
             { "AddFile", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/add_file_icon.png", UriKind.Absolute) },
             { "Delete", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/delete_icon.png", UriKind.Absolute) },
-            { "Rename", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/rename_icon.png", UriKind.Absolute) }
+            { "Rename", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/rename_icon.png", UriKind.Absolute) },
+            { "LoadPlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/load_playlist_icon.png", UriKind.Absolute) },
+            { "SavePlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/save_playlist_icon.png", UriKind.Absolute) }
         };
         #endregion
 
@@ -345,6 +347,10 @@ namespace OptimalPlayer.ViewModel
         public ImageSource DeleteIcon { get { return new BitmapImage(iconUris["Delete"]); } }
 
         public ImageSource RenameIcon { get { return new BitmapImage(iconUris["Rename"]); } }
+
+        public ImageSource LoadIcon { get { return new BitmapImage(iconUris["LoadPlaylist"]); } }
+
+        public ImageSource SaveIcon { get { return new BitmapImage(iconUris["SavePlaylist"]); } }
         #endregion
         #endregion
 
@@ -391,6 +397,7 @@ namespace OptimalPlayer.ViewModel
             DeletePlaylist = new RelayCommand<object>((item) => DeletePlaylistExecute(item));
             RenamePlaylist = new RelayCommand<object>((item) => RenamePlaylistExecute(item));
             OpenPlaylistFile = new RelayCommand(() => OpenPlaylistFileExecute());
+            SavePlaylistToFile = new RelayCommand(() => SavePlaylistToFileExecute());
             AddFileToPlaylist = new RelayCommand(() => AddFileToPlaylistExecute());
             DeleteFileFromPlaylist = new RelayCommand(() => DeleteFileFromPlaylistExecute());
             PlayPause = new RelayCommand(() => PlayPauseExecute());

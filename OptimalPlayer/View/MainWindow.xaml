@@ -156,11 +156,17 @@
                     Command="{Binding AddFileToPlaylist}">
                 <Image Source="{Binding AddFileIcon}"></Image>
             </Button>
+            <Button Margin="5" Padding="10 5"
+                    HorizontalAlignment="Left"
+                    ToolTip="Open playlist file"
+                    Command="{Binding OpenPlaylistFile}">
+                <Image Source="{Binding LoadIcon}"></Image>
+            </Button>
             <Button Margin="0 5" Padding="10 5"
                     HorizontalAlignment="Left"
                     ToolTip="Open playlist file"
-                    Command="{Binding OpenPlaylistFile}"
-                    Content="Open">
+                    Command="{Binding SavePlaylistToFile}">
+                <Image Source="{Binding SaveIcon}"></Image>
             </Button>
         </DockPanel>
         <ListView Grid.Row="1" Grid.Column="0" 
