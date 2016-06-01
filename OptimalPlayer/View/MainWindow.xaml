@@ -164,7 +164,7 @@
             </Button>
             <Button Margin="0 5" Padding="10 5"
                     HorizontalAlignment="Left"
-                    ToolTip="Open playlist file"
+                    ToolTip="Save playlist file"
                     Command="{Binding SavePlaylistToFile}">
                 <Image Source="{Binding SaveIcon}"></Image>
             </Button>

@@ -1,6 +1,6 @@
 ﻿using OptimalPlayer.Model;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 using System.Windows;
@@ -20,7 +20,7 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
-        public static ObservableCollection<AudioFile> GetFilesFromPlaylist(string playlistPath)
+        public static List<AudioFile> GetFilesFromPlaylist(string playlistPath)
         {
             try
             {
@@ -50,13 +50,13 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
-        private static ObservableCollection<AudioFile> ParseXSPF(string playlistPath)
+        private static List<AudioFile> ParseXSPF(string playlistPath)
         {
             XmlDocument document = new XmlDocument();
 
             try
             {
-                ObservableCollection<AudioFile> audioFiles = new ObservableCollection<AudioFile>();
+                List<AudioFile> audioFiles = new List<AudioFile>();
                 
                 document.Load(playlistPath);
 
@@ -92,13 +92,13 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
-        private static ObservableCollection<AudioFile> ParseWPL(string playlistPath)
+        private static List<AudioFile> ParseWPL(string playlistPath)
         {
             XmlDocument document = new XmlDocument();
 
             try
             {
-                ObservableCollection<AudioFile> audioFiles = new ObservableCollection<AudioFile>();
+                List<AudioFile> audioFiles = new List<AudioFile>();
 
                 document.Load(playlistPath);
 
@@ -134,14 +134,14 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
-        private static ObservableCollection<AudioFile> ParseM3U(string playlistPath)
+        private static List<AudioFile> ParseM3U(string playlistPath)
         {
             StreamReader document = new StreamReader(playlistPath);
             string line;
 
             try
             {
-                ObservableCollection<AudioFile> audioFiles = new ObservableCollection<AudioFile>();
+                List<AudioFile> audioFiles = new List<AudioFile>();
 
                 if (document.M3UValid())
                 {

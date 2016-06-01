@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
 using NAudio.Wave;
+using OptimalPlayer.Model;
 using OptimalPlayer.View;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -41,6 +43,7 @@ namespace OptimalPlayer.ViewModel
                 }
 
                 RefreshPlaylistsList();
+                SelectedPlaylist = NewPlaylistName;
                 PlaylistInputControl = null;
 
                 NewPlaylistName = "New Playlist";
@@ -58,6 +61,7 @@ namespace OptimalPlayer.ViewModel
             if (playlist.ToString() == SelectedPlaylist)
             {
                 StopExecute();
+
                 if (SelectedPlaylist != Playlists.First())
                 {
                     SelectedPlaylist = Playlists[Playlists.IndexOf(SelectedPlaylist) - 1];
@@ -66,11 +70,15 @@ namespace OptimalPlayer.ViewModel
                 {
                     SelectedPlaylist = Playlists[Playlists.IndexOf(SelectedPlaylist) + 1];
                 }
+                else
+                {
+                    SelectedPlaylist = null;
+                    StopAndClearPlaylist();
+                }
             }
 
             DatabaseInterface.DeletePlaylist(playlist.ToString());
             RefreshPlaylistsList();
-            UpdatePlaylist();
             RaisePropertyChanged("PlaybackNextStateIcon");
         }
 
@@ -100,11 +108,8 @@ namespace OptimalPlayer.ViewModel
 
             if (result.HasValue && result.Value)
             {
-                Files = PlaylistReader.GetFilesFromPlaylist(openFileDialog.FileName);
+                UpdatePlaylistFromFile(PlaylistReader.GetFilesFromPlaylist(openFileDialog.FileName));
             }
-
-            SelectedPlaylist = null;
-            UpdatePlaylist();
         }
 
         public ICommand SavePlaylistToFile { get; set; }
@@ -140,9 +145,9 @@ namespace OptimalPlayer.ViewModel
                 {
                     DatabaseInterface.AddFileToPlaylist(SelectedPlaylist, fileName);
                 }
-            }
 
-            UpdatePlaylist();
+                UpdatePlaylistFromDB();
+            }
         }
 
         public ICommand DeleteFileFromPlaylist { get; set; }
@@ -161,8 +166,12 @@ namespace OptimalPlayer.ViewModel
                     StopExecute();
                 }
 
-                DatabaseInterface.RemoveFileFromPlaylist(SelectedPlaylist, SelectedFile.Path);
-                Files.Remove(SelectedFile);
+                if (SelectedPlaylist != null)
+                {
+                    DatabaseInterface.RemoveFileFromPlaylist(SelectedPlaylist, SelectedFile.Path);
+                }
+
+                Files = new ObservableCollection<AudioFile>(Files.Where(file => file.Path != SelectedFile.Path));
 
                 RaisePropertyChanged("PlaybackNextStateIcon");
             }

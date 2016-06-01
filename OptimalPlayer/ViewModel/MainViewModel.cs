@@ -116,9 +116,9 @@ namespace OptimalPlayer.ViewModel
                 if (selectedPlaylist != value)
                 {
                     selectedPlaylist = value;
-                    StopExecute();
-                    UpdatePlaylist();
+                    UpdatePlaylistFromDB();
                     RaisePropertyChanged("SelectedPlaylist");
+                    RaisePropertyChanged("PlaybackNextStateIcon");
                 }
             }
         }
@@ -379,11 +379,10 @@ namespace OptimalPlayer.ViewModel
                 DatabaseInterface.SetupConnection(connectionString);
                 Playlists = DatabaseInterface.GetPlaylists();
                 SelectedPlaylist = Playlists[0];
-                UpdatePlaylist();
             }
             catch
             {
-                MessageBox.Show("No files to load!", "");
+                MessageBox.Show("No files to load!");
             }
         }
 
@@ -414,26 +413,46 @@ namespace OptimalPlayer.ViewModel
         /// <summary>
         /// Updates list of files according to selected playlist
         /// </summary>
-        private void UpdatePlaylist()
+        private void UpdatePlaylistFromDB()
         {
-            try
-            {
-                if (SelectedPlaylist != null)
-                {
-                    Files = DatabaseInterface.GetPlaylistFiles(SelectedPlaylist);
-                }
+            Player.Stop();
 
+            if (SelectedPlaylist != null)
+            {
+                Files = DatabaseInterface.GetPlaylistFiles(SelectedPlaylist);
+            }
+            if (Files.Count > 0)
+            {
                 SelectedFile = Files[0];
                 Player.Init(Files.ToList());
             }
-            catch
-            {
-                Player.Stop();
+        }
 
-                if (Files != null)
-                {
-                    Files.Clear();
-                }
+        /// <summary>
+        /// Adds audio files obtained from playlist file to Files list and initializes playback
+        /// </summary>
+        private void UpdatePlaylistFromFile(List<AudioFile> filesList)
+        {
+            Player.Stop();
+            Files = new ObservableCollection<AudioFile>(filesList);
+            SelectedPlaylist = null;
+
+            if (Files.Count > 0)
+            {
+                SelectedFile = Files[0];
+                Player.Init(Files.ToList());
+            }
+        }
+
+        /// <summary>
+        /// Stops playback and deletes all AudioFiles from Files list
+        /// </summary>
+        private void StopAndClearPlaylist()
+        {
+            Player.Stop();
+            if (Files != null)
+            {
+                Files.Clear();
             }
         }
 
