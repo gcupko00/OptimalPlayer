@@ -31,7 +31,7 @@ namespace OptimalPlayer.ViewModel
 
         // When CreatePlaylist command is called, input mode is set to Add
         // and when RenamePlaylist is called, it is set to Rename
-        private enum InputMode { Add, Rename };
+        private enum InputMode { Add, Rename, Save };
         private InputMode playlistInputMode;
 
         // Stores old playlist name when that playlist is being renamed
@@ -56,7 +56,8 @@ namespace OptimalPlayer.ViewModel
             { "Delete", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/delete_icon.png", UriKind.Absolute) },
             { "Rename", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/rename_icon.png", UriKind.Absolute) },
             { "LoadPlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/load_playlist_icon.png", UriKind.Absolute) },
-            { "SavePlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/save_playlist_icon.png", UriKind.Absolute) }
+            { "SavePlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/save_playlist_icon.png", UriKind.Absolute) },
+            { "SaveToNewPlaylist", new Uri("pack://application:,,,/OptimalPlayer;component/Resources/save_to_base_icon.png", UriKind.Absolute) }
         };
         #endregion
 
@@ -351,6 +352,8 @@ namespace OptimalPlayer.ViewModel
         public ImageSource LoadIcon { get { return new BitmapImage(iconUris["LoadPlaylist"]); } }
 
         public ImageSource SaveIcon { get { return new BitmapImage(iconUris["SavePlaylist"]); } }
+
+        public ImageSource SaveToNewPlaylistIcon { get { return new BitmapImage(iconUris["SaveToNewPlaylist"]); } }
         #endregion
         #endregion
 
@@ -392,6 +395,7 @@ namespace OptimalPlayer.ViewModel
         private void InitCommands()
         {
             CreatePlaylist = new RelayCommand(() => CreatePlaylistExecute());
+            CreatePlaylistAndAddFiles = new RelayCommand(() => CreatePlaylistAndAddFilesExecute());
             SavePlaylist = new RelayCommand(() => SavePlaylistExecute());
             DeletePlaylist = new RelayCommand<object>((item) => DeletePlaylistExecute(item));
             RenamePlaylist = new RelayCommand<object>((item) => RenamePlaylistExecute(item));

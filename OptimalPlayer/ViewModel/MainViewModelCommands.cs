@@ -27,6 +27,21 @@ namespace OptimalPlayer.ViewModel
             }
         }
 
+        public ICommand CreatePlaylistAndAddFiles { get; set; }
+
+        private void CreatePlaylistAndAddFilesExecute()
+        {
+            if (PlaylistInputControl == null && Files != null)
+            {
+                PlaylistInputControl = new PlaylistInputControl();
+                playlistInputMode = InputMode.Save;
+            }
+            else
+            {
+                PlaylistInputControl = null;
+            }
+        }
+
         public ICommand SavePlaylist { get; set; }
 
         private void SavePlaylistExecute()
@@ -41,9 +56,18 @@ namespace OptimalPlayer.ViewModel
                 {
                     DatabaseInterface.RenamePlaylist(oldPlaylistName, NewPlaylistName);
                 }
+                else if (playlistInputMode == InputMode.Save)
+                {
+                    DatabaseInterface.AddPlaylist(NewPlaylistName);
+
+                    foreach (AudioFile file in Files)
+                    {
+                        DatabaseInterface.AddFileToPlaylist(NewPlaylistName, file.Path);
+                    }
+                }
 
                 RefreshPlaylistsList();
-                SelectedPlaylist = NewPlaylistName;
+                //SelectedPlaylist = NewPlaylistName;
                 PlaylistInputControl = null;
 
                 NewPlaylistName = "New Playlist";

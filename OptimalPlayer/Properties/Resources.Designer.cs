@@ -223,6 +223,16 @@ namespace OptimalPlayer.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap save_to_base_icon {
+            get {
+                object obj = ResourceManager.GetObject("save_to_base_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap shuffle_icon {
             get {
                 object obj = ResourceManager.GetObject("shuffle_icon", resourceCulture);

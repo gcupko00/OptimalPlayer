@@ -20,6 +20,11 @@
         <DockPanel Grid.Row="0"
                    HorizontalAlignment="Right">
             <Button Margin="5" Padding="10 5"
+                    ToolTip="Save tracks to new playlist"
+                    Command="{Binding CreatePlaylistAndAddFiles}">
+                <Image Source="{Binding SaveToNewPlaylistIcon}"></Image>
+            </Button>
+            <Button Margin="5" Padding="10 5"
                     ToolTip="Create new playlist"
                     Command="{Binding CreatePlaylist}">
                     <Image Source="{Binding NewPlaylistIcon}"></Image>

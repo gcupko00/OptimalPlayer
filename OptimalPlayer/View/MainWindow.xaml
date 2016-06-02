@@ -297,10 +297,12 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button Margin="5 5 0 5" Padding="10 5"
+                            ToolTip="Repeat"
                             Command="{Binding RepeatCommand}">
                         <Image Source="{Binding RepeatIcon}"></Image>
                     </Button>
                     <Button Margin="5 5 5 5" Padding="10 5"
+                            ToolTip="Shuffle"
                             Command="{Binding ShuffleUnshuffleCommand}">
                         <Image Source="{Binding ShuffleIcon}"></Image>
                     </Button>
@@ -311,6 +313,7 @@
         <Button Grid.Row="3" Grid.Column="2"
                 Margin="5 5 5 5" Padding="10 5"
                 HorizontalAlignment="Right"
+                ToolTip="Playlist/Equalizer"
                 Command="{Binding ChangeSideControl}">
             <Image Source="{Binding SideControlIcon}"></Image>
         </Button>
