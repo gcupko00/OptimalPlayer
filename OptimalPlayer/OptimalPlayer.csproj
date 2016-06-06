@@ -116,6 +116,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\BackgroundConverter.cs" />
     <Compile Include="ViewModel\BindingProxy.cs" />
     <Compile Include="ViewModel\DatabaseInterface.cs" />
     <Compile Include="ViewModel\Equalizer.cs" />

@@ -140,7 +140,15 @@ namespace OptimalPlayer.ViewModel
                 RaisePropertyChanged("SelectedFile");
             }
         }
-        
+
+        public AudioFile FilePlaying
+        {
+            get
+            {
+                return Player.FilePlaying;
+            }
+        }
+
         /// <summary>
         /// Gets or sets playback volume in Player
         /// </summary>
@@ -402,7 +410,7 @@ namespace OptimalPlayer.ViewModel
             OpenPlaylistFile = new RelayCommand(() => OpenPlaylistFileExecute());
             SavePlaylistToFile = new RelayCommand(() => SavePlaylistToFileExecute());
             AddFileToPlaylist = new RelayCommand(() => AddFileToPlaylistExecute());
-            DeleteFileFromPlaylist = new RelayCommand(() => DeleteFileFromPlaylistExecute());
+            DeleteFileFromPlaylist = new RelayCommand<object>((item) => DeleteFileFromPlaylistExecute(item as AudioFile));
             PlayPause = new RelayCommand(() => PlayPauseExecute());
             PlayNext = new RelayCommand(() => PlayNextExecute());
             PlayPrevious = new RelayCommand(() => PlayPreviousExecute());
@@ -485,7 +493,7 @@ namespace OptimalPlayer.ViewModel
 
         private void Player_filePlaybackStartedEventHandler()
         {
-            SelectedFile = Files[Files.IndexOf(Player.FilePlaying)];
+            RaisePropertyChanged("FilePlaying");
         }
         #endregion
     }

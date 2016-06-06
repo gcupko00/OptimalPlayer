@@ -6,6 +6,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace OptimalPlayer.ViewModel
@@ -176,26 +177,26 @@ namespace OptimalPlayer.ViewModel
 
         public ICommand DeleteFileFromPlaylist { get; set; }
 
-        private void DeleteFileFromPlaylistExecute()
+        private void DeleteFileFromPlaylistExecute(AudioFile fileToDelete)
         {
             try
             {
-                if (SelectedFile == Player.FilePlaying)
+                if (fileToDelete == Player.FilePlaying)
                 {
                     PlayNextExecute();
                 }
 
-                if (SelectedFile == Files.Last())
+                if (fileToDelete == Files.Last())
                 {
                     StopExecute();
                 }
 
-                if (SelectedPlaylist != null)
+                if (fileToDelete != null)
                 {
-                    DatabaseInterface.RemoveFileFromPlaylist(SelectedPlaylist, SelectedFile.Path);
+                    DatabaseInterface.RemoveFileFromPlaylist(SelectedPlaylist, fileToDelete.Path);
                 }
 
-                Files = new ObservableCollection<AudioFile>(Files.Where(file => file.Path != SelectedFile.Path));
+                Files = new ObservableCollection<AudioFile>(Files.Where(file => file.Path != fileToDelete.Path));
 
                 RaisePropertyChanged("PlaybackNextStateIcon");
             }

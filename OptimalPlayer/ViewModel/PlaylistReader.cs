@@ -16,7 +16,7 @@ namespace OptimalPlayer.ViewModel
         private static readonly string xspfXmlns = "http://xspf.org/ns/0/";
 
         /// <summary>
-        /// Acording to file extension, calls methods which parse that file or throws an exception
+        /// Acording to file extension, calls methods which parse that file or throws an exception.
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
@@ -46,7 +46,7 @@ namespace OptimalPlayer.ViewModel
         }
 
         /// <summary>
-        /// Used to obtain file names from XSPF playlist name and create audio files from them
+        /// Used to obtain file names from XSPF playlist name and create audio files from them.
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
@@ -88,7 +88,7 @@ namespace OptimalPlayer.ViewModel
         }
 
         /// <summary>
-        /// Used to obtain file names from WPL playlist name and create audio files from them
+        /// Used to obtain file names from WPL playlist name and create audio files from them.
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
@@ -130,7 +130,7 @@ namespace OptimalPlayer.ViewModel
         }
 
         /// <summary>
-        /// Used to obtain file names from M3U playlist name and create audio files from them
+        /// Used to obtain file names from M3U playlist name and create audio files from them.
         /// </summary>
         /// <param name="playlistPath">File name of targeted playlist</param>
         /// <returns>List of audio files obtained from playlist</returns>
@@ -174,8 +174,17 @@ namespace OptimalPlayer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Checks if XSPF document has valid xmlns.
+        /// </summary>
+        /// <param name="document">Loaded XSPF document</param>
+        /// <returns>True if root element has valid xmlns attribute, false in other cases</returns>
         private static bool XSPFValid(this XmlDocument document)
         {
+            if (document == null)
+            {
+                return false;
+            }
 
             XmlNodeList playlistNodes = document.GetElementsByTagName("playlist");
 
@@ -189,8 +198,18 @@ namespace OptimalPlayer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Checks if XSPF document has valid root element.
+        /// </summary>
+        /// <param name="document">Loaded WPL document</param>
+        /// <returns>True if root element has valid name, false in other cases</returns>
         private static bool WPLValid(this XmlDocument document)
         {
+            if (document == null)
+            {
+                return false;
+            }
+
             if (document.FirstChild.Name == "wpl")
             {
                 return true;
@@ -201,8 +220,18 @@ namespace OptimalPlayer.ViewModel
             }
         }
 
+        /// <summary>
+        /// Checks if M3U file has valid declaration.
+        /// </summary>
+        /// <param name="document">M3U document StreamReader</param>
+        /// <returns>True if first line is valid, false in other cases</returns>
         private static bool M3UValid(this StreamReader document)
         {
+            if (document == null)
+            {
+                return false;
+            }
+
             if (document.ReadLine() == "#EXTM3U")
             {
                 return true;
@@ -214,7 +243,7 @@ namespace OptimalPlayer.ViewModel
         }
 
         /// <summary>
-        /// Creates new AudioFile object from file path
+        /// Creates new AudioFile object from file path.
         /// </summary>
         /// <param name="filePath">Full path to file</param>
         /// <param name="fileID">Identification number whic will be assigned to AudioFile</param>

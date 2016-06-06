@@ -134,7 +134,7 @@
             <Setter Property="IsMoveToPointEnabled" Value="True"></Setter>
             <Setter Property="Template" Value="{StaticResource Slider2}"></Setter>
         </Style>
-        
+
         <vm:BindingProxy x:Key="DataContextProxy" Data="{Binding}"></vm:BindingProxy>
     </Window.Resources>    
     <Grid>
@@ -177,16 +177,18 @@
                      http://stackoverflow.com/questions/9994241/mvvm-binding-command-to-contextmenu-item -->
                 <ContextMenu x:Key="ItemContextMenu" DataContext="{StaticResource DataContextProxy}">
                     <MenuItem Header="Delete"
-                              Command="{Binding Data.DeleteFileFromPlaylist}">
+                              Command="{Binding Data.DeleteFileFromPlaylist}"
+                              CommandParameter="{Binding Data.SelectedFile}">
                         <MenuItem.Icon>
                             <Image Source="{Binding Data.DeleteIcon}"></Image>
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
+                <vm:BackgroundConverter x:Key="BackgroundConverter"/>
             </ListView.Resources>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" Width="120">
+                    <GridViewColumn Header="File name" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Path=Name}"></TextBlock>
@@ -231,8 +233,16 @@
                 </GridView>
             </ListView.View>
             <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
+                <Style TargetType="{x:Type ListViewItem}">
                     <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}"></Setter>
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource BackgroundConverter}">
+                                <Binding RelativeSource="{RelativeSource Self}"></Binding>
+                                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ListView}}" Path="DataContext.FilePlaying" diag:PresentationTraceSources.TraceLevel="High"></Binding>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListView.ItemContainerStyle>
             <i:Interaction.Triggers>

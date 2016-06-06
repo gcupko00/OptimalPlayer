@@ -15,6 +15,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="Auto" MaxHeight="80"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel Grid.Row="0"
@@ -34,7 +35,14 @@
                           Content="{Binding PlaylistInputControl}"
                           HorizontalAlignment="Stretch">
         </ContentPresenter>
-        <ListView Grid.Row="2"
+        <DockPanel Grid.Row="2"
+                   Background="LightGray">
+            <TextBlock 
+                   VerticalAlignment="Center" HorizontalAlignment="Center"  
+                   FontSize="18" FontWeight="DemiBold" Foreground="SteelBlue"
+                   Text="Playlists"></TextBlock>
+        </DockPanel>
+        <ListView Grid.Row="3"
                   VerticalAlignment="Stretch"
                   ItemsSource="{Binding Playlists}"
                   SelectedItem="{Binding SelectedPlaylist, Mode=OneWay}">
