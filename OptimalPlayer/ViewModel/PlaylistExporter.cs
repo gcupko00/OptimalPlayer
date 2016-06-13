@@ -25,7 +25,7 @@ namespace OptimalPlayer.ViewModel
 
             if (result.HasValue && result.Value)
             {
-                saveFileDialog.FileName.CreateM3UFile(audioFilesList);
+                saveFileDialog.FileName.WriteM3UFile(audioFilesList);
             }
         }
 
@@ -34,7 +34,7 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         /// <param name="fileName">M3U playlist file's full name</param>
         /// <param name="audioFilesList">List of audio files to be exported to mm3u file</param>
-        private static void CreateM3UFile(this string fileName, List<AudioFile> audioFilesList)
+        private static void WriteM3UFile(this string fileName, List<AudioFile> audioFilesList)
         {
             if (Path.GetExtension(fileName) != ".m3u")
             {

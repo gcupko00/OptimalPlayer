@@ -446,10 +446,15 @@ namespace OptimalPlayer.ViewModel
         private void UpdatePlaylistFromFile(List<AudioFile> filesList)
         {
             Player.Stop();
-            Files = new ObservableCollection<AudioFile>(filesList);
+
+            if (filesList != null)
+            {
+                Files = new ObservableCollection<AudioFile>(filesList);
+            }
+
             SelectedPlaylist = null;
 
-            if (Files.Count > 0)
+            if (Files != null && Files.Count > 0)
             {
                 SelectedFile = Files[0];
                 Player.Init(Files.ToList());

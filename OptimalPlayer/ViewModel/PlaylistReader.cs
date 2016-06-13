@@ -68,7 +68,7 @@ namespace OptimalPlayer.ViewModel
                     {
                         string filePath = HttpUtility.UrlDecode(locations[i].InnerText).Substring(8);
 
-                        TagLib.File file = TagLib.File.Create(filePath);
+                        filePath = GetFullPath(playlistPath, filePath);
 
                         audioFiles.Add(AudioFileFromPath(filePath, i));
                     }
@@ -110,7 +110,7 @@ namespace OptimalPlayer.ViewModel
                     {
                         string filePath = HttpUtility.UrlDecode(medias[i].Attributes["src"].InnerText);
 
-                        TagLib.File file = TagLib.File.Create(filePath);
+                        filePath = GetFullPath(playlistPath, filePath);
 
                         audioFiles.Add(AudioFileFromPath(filePath, i));
                     }
@@ -150,11 +150,11 @@ namespace OptimalPlayer.ViewModel
                     {
                         if (line.Substring(0, 8) != "#EXTINF:")
                         {
-                            // There can be some html encoded symbols, such as &amp;
+                            // Line may be html encoded and it is very dangerous
                             // so we must deal with it
                             string filePath = HttpUtility.HtmlDecode(line);
 
-                            TagLib.File file = TagLib.File.Create(filePath);
+                            filePath = GetFullPath(playlistPath, filePath);
 
                             audioFiles.Add(AudioFileFromPath(filePath, i++));
                         }
@@ -239,6 +239,26 @@ namespace OptimalPlayer.ViewModel
             else
             {
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Checks if path is relative or absolute and returns absolute path
+        /// </summary>
+        /// <param name="directoryPath">Absolute directory path</param>
+        /// <param name="relativePath">Relative file path</param>
+        /// <returns>Absolute path if relativePath is relative</returns>
+        private static string GetFullPath(string directoryPath, string relativePath)
+        {
+            Uri uri;
+
+            if (Uri.TryCreate(relativePath, UriKind.Relative, out uri))
+            {
+                return Path.Combine(Path.GetFullPath(directoryPath), relativePath);
+            }
+            else
+            {
+                return relativePath;
             }
         }
 
