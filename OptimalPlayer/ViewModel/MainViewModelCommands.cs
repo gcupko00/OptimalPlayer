@@ -47,7 +47,11 @@ namespace OptimalPlayer.ViewModel
 
         private void SavePlaylistExecute()
         {
-            if (!Playlists.Contains(NewPlaylistName) && !String.IsNullOrEmpty(NewPlaylistName))
+            if (Playlists == null)
+            {
+                MessageBox.Show("Error trying to save playlist", "Database access error");
+            }
+            else if (!Playlists.Contains(NewPlaylistName) && !String.IsNullOrEmpty(NewPlaylistName))
             {
                 if (playlistInputMode == InputMode.Add)
                 {
@@ -141,7 +145,10 @@ namespace OptimalPlayer.ViewModel
 
         private void SavePlaylistToFileExecute()
         {
-            PlaylistExporter.SavePlaylist( Files.ToList());
+            if (Files != null && Files.Count > 0)
+            {
+                PlaylistExporter.SavePlaylist(Files.ToList());
+            }
         }
 
         public ICommand AddFileToPlaylist { get; set; }
@@ -160,10 +167,6 @@ namespace OptimalPlayer.ViewModel
                     SavePlaylistExecute();
                     RefreshPlaylistsList();
                     SelectedPlaylist = Playlists[0];
-                }
-                else if (SelectedPlaylist == null)
-                {
-                    MessageBox.Show("Please, select the playlist!", "No playlist selected");
                 }
 
                 foreach (string fileName in openFileDialog.FileNames)
@@ -289,13 +292,16 @@ namespace OptimalPlayer.ViewModel
 
         private void ShuffleUnshuffleCommandExecute()
         {
-            if (!Player.Shuffled)
+            if (Files != null && Files.Count > 0)
             {
-                Player.Shuffle();
-            }
-            else
-            {
-                Player.Unshuffle();
+                if (!Player.Shuffled)
+                {
+                    Player.Shuffle();
+                }
+                else
+                {
+                    Player.Unshuffle();
+                }
             }
 
             RaisePropertyChanged("ShuffleIcon");

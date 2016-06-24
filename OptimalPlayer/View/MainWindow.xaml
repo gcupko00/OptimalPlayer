@@ -7,10 +7,11 @@
         xmlns:vm="clr-namespace:OptimalPlayer.ViewModel"
         xmlns:diag="clr-namespace:System.Diagnostics;assembly=WindowsBase"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
-        Title="Optimal Player"
         Height="500" Width="800"
         MinHeight="350" MinWidth="800"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
+        Title="{Binding WindowTitle}"
+        Background="DimGray">
     
     <Window.Resources>
         <Style x:Key="VolumeSliderRepeatButtonRight" TargetType="RepeatButton">
@@ -59,7 +60,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Rectangle Height="18" Width="10" Fill="LawnGreen"></Rectangle>
+                        <Rectangle Height="18" Width="10" Fill="LightGreen"></Rectangle>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -169,7 +170,8 @@
                 <Image Source="{Binding SaveIcon}"></Image>
             </Button>
         </DockPanel>
-        <ListView Grid.Row="1" Grid.Column="0" 
+        <ListView Grid.Row="1" Grid.Column="0"
+                  Foreground="DarkSlateGray" Background="Honeydew"
                   ItemsSource="{Binding Files}"
                   SelectedItem="{Binding SelectedFile}">
             <ListView.Resources>
@@ -184,21 +186,32 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
+
+                <Style x:Key="GridViewColumnHeaderGripper"
+                       TargetType="Thumb">
+                    <Setter Property="Background" Value="White"></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Thumb}">
+                                <Border Padding="{TemplateBinding Padding}"
+                                        Background="Transparent">
+                                    <Rectangle HorizontalAlignment="Center"
+                                               Width="3"
+                                               Fill="{TemplateBinding Background}"></Rectangle>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
                 <vm:BackgroundConverter x:Key="BackgroundConverter"/>
             </ListView.Resources>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="File name" Width="120">
+                    <GridViewColumn Header="Author" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Duration" Width="60">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Duration}"></TextBlock>
+                                <TextBlock Text="{Binding Path=Artist}"></TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -209,10 +222,10 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Author" Width="120">
+                    <GridViewColumn Header="Duration" Width="60">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Path=Artist}"></TextBlock>
+                                <TextBlock Text="{Binding Path=Duration}"></TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -230,6 +243,39 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn Header="File name" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="GridViewColumnHeader">
+                                        <Grid>
+                                            <Border Name="HeaderBorder" Background="LightGray" BorderThickness="0" Padding="5 2">
+                                                <ContentPresenter Name="HeaderContent"
+                                                                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                  TextElement.Foreground="DarkSlateBlue"
+                                                                  RecognizesAccessKey="True"
+                                                                  SnapsToDevicePixels="True"></ContentPresenter>
+                                            </Border>
+                                            <Thumb x:Name="PART_HeaderGripper" HorizontalAlignment="Right" Style="{StaticResource GridViewColumnHeaderGripper}"></Thumb>
+                                        </Grid>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="true">
+                                                <Setter TargetName="HeaderBorder" Property="Background" Value="LightBlue"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
                 </GridView>
             </ListView.View>
             <ListView.ItemContainerStyle>
@@ -243,6 +289,17 @@
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
+                    <Style.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="true"></Condition>
+                                <Condition Property="Selector.IsSelectionActive" Value="true"></Condition>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" Value="SkyBlue"></Setter>
+                            <Setter Property="Foreground" Value="Black"></Setter>
+                            <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                        </MultiTrigger>
+                    </Style.Triggers>
                 </Style>
             </ListView.ItemContainerStyle>
             <i:Interaction.Triggers>
@@ -299,6 +356,7 @@
                             Margin="10 5 5 5"
                             VerticalAlignment="Center"
                             Minimum="0" Maximum="1"
+                            ToolTip="Volume" AutoToolTipPlacement="BottomRight" AutoToolTipPrecision="2"
                             Style="{StaticResource VolumeSlider}"
                             Value="{Binding Volume, Mode=TwoWay}">  
                     </Slider>

@@ -44,6 +44,7 @@
         </DockPanel>
         <ListView Grid.Row="3"
                   VerticalAlignment="Stretch"
+                  Background="LightGray"
                   ItemsSource="{Binding Playlists}"
                   SelectedItem="{Binding SelectedPlaylist, Mode=OneWay}">
             <ListView.Resources>

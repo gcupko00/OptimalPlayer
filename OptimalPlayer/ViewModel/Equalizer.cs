@@ -48,11 +48,19 @@ namespace OptimalPlayer.ViewModel
                 {
                     if (filters[n, bandIndex] == null)
                     {
-                        filters[n, bandIndex] = BiQuadFilter.PeakingEQ(sourceProvider.WaveFormat.SampleRate, band.Frequency, band.Bandwidth, band.Gain);
+                        filters[n, bandIndex] = BiQuadFilter.PeakingEQ(
+                                sourceProvider.WaveFormat.SampleRate, 
+                                band.Frequency, 
+                                band.Bandwidth, 
+                                band.Gain);
                     }
                     else
                     {
-                        filters[n, bandIndex].SetPeakingEq(sourceProvider.WaveFormat.SampleRate, band.Frequency, band.Bandwidth, band.Gain);
+                        filters[n, bandIndex].SetPeakingEq(
+                                sourceProvider.WaveFormat.SampleRate, 
+                                band.Frequency, 
+                                band.Bandwidth, 
+                                band.Gain);
                     }
                 }
             }

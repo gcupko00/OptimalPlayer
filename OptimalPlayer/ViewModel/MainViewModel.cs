@@ -116,9 +116,11 @@ namespace OptimalPlayer.ViewModel
             {
                 if (selectedPlaylist != value)
                 {
+                    Player.Stop();
                     selectedPlaylist = value;
                     UpdatePlaylistFromDB();
                     RaisePropertyChanged("SelectedPlaylist");
+                    RaisePropertyChanged("WindowTitle");
                     RaisePropertyChanged("PlaybackNextStateIcon");
                 }
             }
@@ -138,6 +140,7 @@ namespace OptimalPlayer.ViewModel
             {
                 selectedFile = value;
                 RaisePropertyChanged("SelectedFile");
+                RaisePropertyChanged("WindowTitle");
             }
         }
 
@@ -272,6 +275,26 @@ namespace OptimalPlayer.ViewModel
             }
         }
 
+        private string windowTitle = "Optimal Player";
+        public string WindowTitle
+        {
+            get
+            {
+                if (SelectedPlaylist != null && SelectedFile != null)
+                {
+                    return windowTitle + " - " + SelectedPlaylist + " - " + SelectedFile.Artist + " - " + SelectedFile.SongName;
+                }
+                else if (SelectedPlaylist == null && SelectedFile != null)
+                {
+                    return windowTitle + " - " + SelectedFile.Artist + " - " + SelectedFile.SongName;
+                }
+                else
+                {
+                    return windowTitle;
+                }
+            }
+        }
+
         #region Button images
         /// <summary>
         /// Icon to be displayed on play button according to current state of audio playback
@@ -379,21 +402,26 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         private void InitData()
         {
+            bool dbSuccess = false;
+
             try
             {
                 System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
                 timer.Tick += Timer_Tick;
                 timer.Start();
-                Player.playbackFinishedEventHandler += Player_playbackFinishedEventHandler;
-                Player.filePlaybackStartedEventHandler += Player_filePlaybackStartedEventHandler;
+                Player.playbackFinishedEvent += Player_playbackFinishedEventHandler;
+                Player.filePlaybackStartedEvent += Player_filePlaybackStartedEventHandler;
 
-                DatabaseInterface.SetupConnection(connectionString);
+                dbSuccess = DatabaseInterface.SetupConnection(connectionString);
                 Playlists = DatabaseInterface.GetPlaylists();
                 SelectedPlaylist = Playlists[0];
             }
             catch
             {
-                MessageBox.Show("No files to load!");
+                if (dbSuccess == false)
+                {
+                    MessageBox.Show("Error trying to set up database connection! You may not be able to save playlists to database.", "Database access error");
+                }
             }
         }
 
@@ -427,8 +455,6 @@ namespace OptimalPlayer.ViewModel
         /// </summary>
         private void UpdatePlaylistFromDB()
         {
-            Player.Stop();
-
             if (SelectedPlaylist != null)
             {
                 Files = DatabaseInterface.GetPlaylistFiles(SelectedPlaylist);
@@ -436,7 +462,6 @@ namespace OptimalPlayer.ViewModel
             if (Files.Count > 0)
             {
                 SelectedFile = Files[0];
-                Player.Init(Files.ToList());
             }
         }
 
@@ -457,7 +482,6 @@ namespace OptimalPlayer.ViewModel
             if (Files != null && Files.Count > 0)
             {
                 SelectedFile = Files[0];
-                Player.Init(Files.ToList());
             }
         }
 

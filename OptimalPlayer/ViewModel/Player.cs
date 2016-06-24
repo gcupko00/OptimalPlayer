@@ -161,7 +161,7 @@ namespace OptimalPlayer.ViewModel
 
                 Play();
 
-                filePlaybackStartedEventHandler();
+                filePlaybackStartedEvent();
             }
             catch
             {
@@ -193,6 +193,8 @@ namespace OptimalPlayer.ViewModel
                 playbackDevice.PlaybackStopped -= PlaybackDevice_PlaybackStopped;
 
                 playbackDevice.Stop();
+
+                playbackDevice.Dispose();
             }
 
             if (inputStream != null)
@@ -282,7 +284,7 @@ namespace OptimalPlayer.ViewModel
             }
             else if (FilePlaying == audioFiles.Last())
             {
-                playbackFinishedEventHandler();
+                playbackFinishedEvent();
             }
             else
             {
@@ -293,13 +295,16 @@ namespace OptimalPlayer.ViewModel
         /// <summary>
         /// Raises when last file in playlist has stopped playling
         /// </summary>
-        public static event PlaybackFinishedEventHandler playbackFinishedEventHandler;
+        public static event PlaybackFinishedEvent playbackFinishedEvent;
 
-        public delegate void PlaybackFinishedEventHandler();
+        public delegate void PlaybackFinishedEvent();
+        
+        /// <summary>
+        /// Raises when playback is started
+        /// </summary>
+        public static event FilePlaybackStartedEvent filePlaybackStartedEvent;
 
-        public static event FilePlaybackStartedEventHandler filePlaybackStartedEventHandler;
-
-        public delegate void FilePlaybackStartedEventHandler();
+        public delegate void FilePlaybackStartedEvent();
         #endregion
     }
 }
