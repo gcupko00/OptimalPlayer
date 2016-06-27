@@ -17,6 +17,8 @@ namespace OptimalPlayer.ViewModel
 
         private void CreatePlaylistExecute()
         {
+            NewPlaylistName = "New Playlist";
+
             if (PlaylistInputControl == null)
             {
                 PlaylistInputControl = new PlaylistInputControl();
@@ -72,10 +74,7 @@ namespace OptimalPlayer.ViewModel
                 }
 
                 RefreshPlaylistsList();
-                //SelectedPlaylist = NewPlaylistName;
                 PlaylistInputControl = null;
-
-                NewPlaylistName = "New Playlist";
             }
             else
             {
@@ -119,6 +118,7 @@ namespace OptimalPlayer.ViewModel
             {
                 PlaylistInputControl = new PlaylistInputControl();
                 oldPlaylistName = playlist.ToString();
+                NewPlaylistName = playlist.ToString();
                 playlistInputMode = InputMode.Rename;
             }
             else

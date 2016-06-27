@@ -39,7 +39,7 @@
                    Background="LightGray">
             <TextBlock 
                    VerticalAlignment="Center" HorizontalAlignment="Center"  
-                   FontSize="18" FontWeight="DemiBold" Foreground="SteelBlue"
+                   FontSize="18" FontWeight="Medium" Foreground="CadetBlue"
                    Text="Playlists"></TextBlock>
         </DockPanel>
         <ListView Grid.Row="3"

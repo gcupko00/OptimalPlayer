@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <TextBox Margin="5 5 5 0"
                  Height="25"
-                 Background="{Binding PlaylistInputTextboxBackground}" Foreground="White"
+                 Background="{Binding PlaylistInputTextboxBackground}"
                  HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"
                  Text="{Binding NewPlaylistName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         <DockPanel Grid.Row="1" 

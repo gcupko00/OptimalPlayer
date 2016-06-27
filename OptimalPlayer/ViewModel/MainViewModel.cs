@@ -253,12 +253,12 @@ namespace OptimalPlayer.ViewModel
             set
             {
                 newPlaylistName = value;
-                PlaylistInputTextboxBackground = "Transparent";
+                PlaylistInputTextboxBackground = "White";
                 RaisePropertyChanged("NewPlaylistName");
             }
         }
 
-        private string playlistInputTextboxBackground = "Transparent";
+        private string playlistInputTextboxBackground = "White";
         /// <summary>
         /// Gets or sets background color for new playlist name textbox
         /// </summary>

@@ -17,7 +17,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RepeatButton">
-                        <Border  BorderThickness="1" Background="LightBlue" Width="18"></Border>
+                        <Border BorderThickness="1" Background="DodgerBlue" Width="18"></Border>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -29,7 +29,17 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Thumb">
-                        <Rectangle Height="20" Width="18" Fill="DodgerBlue"></Rectangle>
+                        <Border BorderThickness="1" BorderBrush="DarkSlateGray" CornerRadius="5">
+                            <Grid>
+                                <Border Name="mask" Background="DarkSlateGray" CornerRadius="5"></Border>
+                                <StackPanel>
+                                    <StackPanel.OpacityMask>
+                                        <VisualBrush Visual="{Binding ElementName=mask}"></VisualBrush>
+                                    </StackPanel.OpacityMask>
+                                    <Grid Height="20" Width="18" Background="DarkSlateGray"></Grid>
+                                </StackPanel>
+                            </Grid>
+                        </Border>                        
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
