@@ -6,7 +6,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace OptimalPlayer.ViewModel
@@ -167,6 +166,15 @@ namespace OptimalPlayer.ViewModel
                     SavePlaylistExecute();
                     RefreshPlaylistsList();
                     SelectedPlaylist = Playlists[0];
+                }
+                else if (Playlists.Count == 1 && SelectedPlaylist == null)
+                {
+                    SelectedPlaylist = Playlists[0];
+                } 
+                else if (SelectedPlaylist == null)
+                {
+                    MessageBox.Show("Playlist not selected!");
+                    return;
                 }
 
                 foreach (string fileName in openFileDialog.FileNames)
